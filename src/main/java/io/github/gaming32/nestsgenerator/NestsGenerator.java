@@ -119,6 +119,21 @@ public class NestsGenerator {
     }
 
     private record InnerClassInfo(String name, String outerName, String innerName, int access) {
+        InnerClassInfo {
+            if (outerName == null || innerName == null) {
+                final int dollarIndex = name.lastIndexOf('$');
+                if (dollarIndex == -1) {
+                    throw new IllegalArgumentException("Non-full InnerClassInfo must have a $ in full name " + name);
+                }
+                if (outerName == null) {
+                    outerName = name.substring(0, dollarIndex);
+                }
+                if (innerName == null) {
+                    // The nester doesn't use the true inner name, but rather the name including any numerical local class prefix.
+                    innerName = name.substring(dollarIndex + 1);
+                }
+            }
+        }
     }
 
     private record OuterClassInfo(String outerMethod, String outerDesc) {

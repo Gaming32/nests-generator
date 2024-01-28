@@ -89,6 +89,11 @@ public class NestsGeneratorCli {
         }
         System.err.println("Collecting additional classes");
         generator.finish();
-        NesterIo.write(generator.getNests(), new BufferedWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8)));
+        final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8));
+        try {
+            NesterIo.write(generator.getNests(), writer);
+        } finally {
+            writer.flush();
+        }
     }
 }
