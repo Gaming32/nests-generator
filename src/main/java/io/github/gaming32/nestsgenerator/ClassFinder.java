@@ -21,9 +21,6 @@ public interface ClassFinder {
         final String separator = source.getFileSystem().getSeparator();
         return className -> {
             final Path path = source.resolve(className.replace("/", separator).concat(".class"));
-            if (!Files.isRegularFile(path)) {
-                throw new ClassNotFoundException(className);
-            }
             try (InputStream is = Files.newInputStream(path)) {
                 return new ClassReader(is);
             } catch (IOException e) {
